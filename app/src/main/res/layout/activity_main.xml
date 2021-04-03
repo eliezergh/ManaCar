@@ -26,7 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/amber_500"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -40,96 +41,99 @@
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:paddingRight="20dp"
-        android:paddingBottom="20dp">
+        android:paddingBottom="20dp"
+        android:background="#2C2C2C">
 
         <TextView
             android:id="@+id/TitleText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Mis Vehículos"
-            android:textColor="@color/blue_200"
+            android:text="@string/mainListTitle"
+            android:textColor="@color/white"
             android:textSize="30sp"
             android:textStyle="bold" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_view"
-            android:layout_gravity="center"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginBottom="10dp"
-            app:contentPadding="15dp"
-            app:cardCornerRadius="4dp"
-            app:cardBackgroundColor="@color/blue_200">
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:strokeColor="@color/amber_200"
+            app:strokeWidth="1dp">
 
-            <TextView
-                android:id="@+id/info_text"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Ford Fiesta ST Line"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+                <!-- Media --><!--https://www.freepik.es/vectores/coche">Vector de Coche creado por rawpixel.com - www.freepik.es-->
+                <!-- PORTAPAPELES
+                android:contentDescription="@string/content_description_media"
+                -->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="194dp"
+                    app:srcCompat="@drawable/default_vehicle"
+                    android:scaleType="centerCrop"
+                    tools:ignore="VectorDrawableCompat"
+                    android:alpha="0.3"/>
 
-        </androidx.cardview.widget.CardView>
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_view2"
-            android:layout_gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginBottom="10dp"
-            app:contentPadding="15dp"
-            app:cardCornerRadius="4dp"
-            app:cardElevation="50dp"
-            app:cardBackgroundColor="@color/blue_200">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            <TextView
-                android:id="@+id/info_text2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Volkswagen Polo"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                    <!-- Title, secondary and supporting text -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/VehicleCustomName"
+                        android:textAppearance="?attr/textAppearanceHeadline6"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/VehicleDescription"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="?android:attr/textColorSecondary"
+                        />
+                    <!--<TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text=""
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="?android:attr/textColorSecondary"
+                        />-->
 
+                </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_view3"
-            android:layout_gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginBottom="10dp"
-            app:contentPadding="15dp"
-            app:cardCornerRadius="4dp"
-            app:cardElevation="50dp"
-            app:cardBackgroundColor="@color/blue_200">
+                <!-- Buttons -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal">
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/action_1"
+                        style="?attr/borderlessButtonStyle"
+                        android:layout_marginRight="8dp" />
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/action_2"
+                        style="?attr/borderlessButtonStyle"
+                        />
+                </LinearLayout>
 
-            <TextView
-                android:id="@+id/info_text3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Seat Cordoba"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </androidx.cardview.widget.CardView>
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_view4"
-            android:layout_gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginBottom="10dp"
-            app:contentPadding="15dp"
-            app:cardCornerRadius="4dp"
-            app:cardElevation="50dp"
-            app:cardBackgroundColor="@color/blue_200">
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/info_text4"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Skoda Fabia"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
     </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

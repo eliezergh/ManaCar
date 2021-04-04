@@ -79,6 +79,16 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addNewVehicleSaveButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/save_spanish"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/amber_500" />
+
         </LinearLayout>
 
     </ScrollView>

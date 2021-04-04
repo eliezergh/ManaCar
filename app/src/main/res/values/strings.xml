@@ -14,4 +14,5 @@
     <string name="VehicleMotor">Motor y CV</string>
     <string name="newVehicle">Nuevo Vehículo</string>
     <string name="registrationNumber">0000ABC</string>
+    <string name="save_spanish">Guardar</string>
 </resources>

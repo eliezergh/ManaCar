@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "691666547026",
+    "project_id": "manacar-46ccf",
+    "storage_bucket": "manacar-46ccf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:691666547026:android:c3a98ad839f7259c944a8b",
+        "android_client_info": {
+          "package_name": "com.eliezergh.manacar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "691666547026-t904dukkf4ugaqf2asbdvm1t1jbaib8b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCprEDrgCfe7OmxhnKAHdbxGygwDzwqd78"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "691666547026-t904dukkf4ugaqf2asbdvm1t1jbaib8b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

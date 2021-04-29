@@ -1,4 +1,2 @@
-include ':mysql-connector-java-5.1.49'
-include ':mysql-connector-java-8.0.21'
 include ':app'
 rootProject.name = "ManaCar"

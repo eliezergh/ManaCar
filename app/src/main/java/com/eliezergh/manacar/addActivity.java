@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -12,34 +14,39 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.installations.RandomFidGenerator;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Random;
 
 
 public class addActivity extends AppCompatActivity {
+
+    //DB Connection
+    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
-
         // calling the action bar
         ActionBar actionBar = getSupportActionBar();
-
         // showing the back button in action bar
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-        //Save Button
-        Button saveButton = findViewById(R.id.addNewVehicleSaveButton);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sqlThread.start();
-                startActivity(new Intent(addActivity.this,MainActivity.class));
-            }
-        });
+        Random rnd = new Random();
+        rnd.nextInt();
     }
 
     @Override
@@ -58,29 +65,41 @@ public class addActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    //Write data to DB
-    Thread sqlThread = new Thread(){
-      public void run(){
-          //First, we should get the values on the form
-          TextInputLayout newVehicleManufacturer = findViewById(R.id.newVehicleManufacturer);
-          String VehicleManufacturer = newVehicleManufacturer.getEditText().getText().toString();
-          TextInputLayout newVehicleMotor = findViewById(R.id.newVehicleMotor);
-          String VehicleMotor = newVehicleMotor.getEditText().getText().toString();
-          TextInputLayout newVehicleRegistrationNumber = findViewById(R.id.newVehicleRegistrationNumber);
-          String VehicleRegistrationNumber = newVehicleRegistrationNumber.getEditText().getText().toString();
-          //Write the query
-          String query ="INSERT INTO (Manufacturer, Motor, registrationNumber) VALUES ('"+VehicleManufacturer+"', '"+VehicleMotor+"', '"+VehicleRegistrationNumber+"')";
-          //Let's save data
-          dbConnect dbc = new dbConnect();
-          Connection conn = dbc.connect();
-          try {
-              PreparedStatement prepStat = conn.prepareStatement(query);
-              prepStat.executeUpdate();
-              conn.close();
-          } catch (SQLException e){
-              Log.e("MySQL Connection: ", e.getMessage());
-          }
-      }
-    };
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Button saveButton = findViewById(R.id.addNewVehicleSaveButton);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Generate a random number to assign on vehicleID
+                Random rnd = new Random();
+                int vid = rnd.nextInt();
+                DatabaseReference mConditionVId = mRootRef.child("vehicles").child("vId"+vid);
+                DatabaseReference mConditionVName = mRootRef.child("vehicles").child("vId"+vid).child("vehicleName");
+                DatabaseReference mConditionVMotor = mRootRef.child("vehicles").child("vId"+vid).child("Motor");
+                DatabaseReference mConditionVRNumber = mRootRef.child("vehicles").child("vId"+vid).child("registrationNumber");
+                //First, we should get the values on the form
+                TextInputLayout newVehicleManufacturer = findViewById(R.id.newVehicleManufacturer);
+                String VehicleManufacturer = newVehicleManufacturer.getEditText().getText().toString();
+                TextInputLayout newVehicleMotor = findViewById(R.id.newVehicleMotor);
+                String VehicleMotor = newVehicleMotor.getEditText().getText().toString();
+                TextInputLayout newVehicleRegistrationNumber = findViewById(R.id.newVehicleRegistrationNumber);
+                String VehicleRegistrationNumber = newVehicleRegistrationNumber.getEditText().getText().toString();
+
+                if (!VehicleManufacturer.isEmpty() && !VehicleMotor.isEmpty() && !VehicleRegistrationNumber.isEmpty()) {
+                    mConditionVName.setValue(VehicleManufacturer);
+                    mConditionVMotor.setValue(VehicleMotor);
+                    mConditionVRNumber.setValue(VehicleRegistrationNumber);
+                    //Go back to Main Activity
+                    startActivity(new Intent(addActivity.this, MainActivity.class));
+                } else {
+                    Log.e("Vehicle ADD: ", "EMPTY FORM");
+                    Snackbar.make(saveButton, "Hay campos vacios", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 }

@@ -92,7 +92,7 @@ public class addActivity extends AppCompatActivity {
                 TextInputLayout newVehicleMainImage = findViewById(R.id.newVehicleMainImage);
                 String VehicleMainImage = newVehicleMainImage.getEditText().getText().toString();
 
-                if (!VehicleManufacturer.isEmpty() && !VehicleMotor.isEmpty() && !VehicleRegistrationNumber.isEmpty() && !VehicleMainImage.isEmpty()) {
+                if (!VehicleManufacturer.isEmpty() && !VehicleMotor.isEmpty() && !VehicleRegistrationNumber.isEmpty()) {
                     mConditionVName.setValue(VehicleManufacturer);
                     mConditionVMotor.setValue(VehicleMotor);
                     mConditionVRNumber.setValue(VehicleRegistrationNumber);

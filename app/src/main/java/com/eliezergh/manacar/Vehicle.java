@@ -1,6 +1,7 @@
 package com.eliezergh.manacar;
 
 public class Vehicle {
+    protected String vId;
     protected String vehicleManufacturer;
     protected String Motor;
     protected String vehicleRegistrationNumber;
@@ -9,11 +10,15 @@ public class Vehicle {
     public Vehicle() {
 
     }
-    public Vehicle(String vehicleManufacturer, String Motor, String vehicleRegistrationNumber, String vehicleMainImage){
+    public Vehicle(String vId, String vehicleManufacturer, String Motor, String vehicleRegistrationNumber, String vehicleMainImage){
+        this.vId = vId;
         this.vehicleManufacturer = vehicleManufacturer;
         this.Motor = Motor;
         this.vehicleRegistrationNumber = vehicleRegistrationNumber;
         this.vehicleMainImage = vehicleMainImage;
+    }
+    public String getvId() {
+        return vId;
     }
 
     public String getMotor() {
@@ -30,6 +35,9 @@ public class Vehicle {
 
     public String getVehicleMainImage(){ return vehicleMainImage;}
 
+    public void setvId (String vId){
+        this.vId = vId;
+    }
     public void setMotor(String motor) {
         this.Motor = motor;
     }

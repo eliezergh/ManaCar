@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -92,23 +93,23 @@ public class VehicleFragment extends Fragment {
                     //long childItems = snapshot.getChildrenCount();
                     for (DataSnapshot snap : snapshot.getChildren()){
                         Vehicle vehicle = snap.getValue(Vehicle.class);
+                        vId[0] = (String) snap.getKey();
                         vehicleManufacturer[0] = (String) vehicle.vehicleManufacturer;
                         Motor[0] = (String) vehicle.Motor;
                         vehicleRegistrationNumber[0] = (String) vehicle.vehicleRegistrationNumber;
                         vehicleMainImage[0] = (String) vehicle.vehicleMainImage;
-                        vehicleList.add(new Vehicle(vehicleManufacturer[0], Motor[0], vehicleRegistrationNumber[0], vehicleMainImage[0]));
-                        vId[0] = snapshot.getChildren().toString();
+                        vehicleList.add(new Vehicle(vId[0], vehicleManufacturer[0], Motor[0], vehicleRegistrationNumber[0], vehicleMainImage[0]));
+
                     }
+                    recyclerView.setAdapter(new MyVehicleRecyclerViewAdapter(getActivity(), vehicleList, mListener));
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
 
                 }
             });
-            MyVehicleRecyclerViewAdapter myVehicleRecyclerViewAdapter = new MyVehicleRecyclerViewAdapter(getActivity(), vehicleList, mListener);
             //recyclerView.setAdapter(new MyVehicleRecyclerViewAdapter(getActivity(), vehicleList, mListener));
-            recyclerView.setAdapter(myVehicleRecyclerViewAdapter);
-            myVehicleRecyclerViewAdapter.notifyDataSetChanged();
         }
         return view;
     }

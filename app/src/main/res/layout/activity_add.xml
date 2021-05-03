@@ -82,7 +82,7 @@
                 android:id="@+id/newVehicleMainImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Matrícula"
+                android:hint="URL Imagen"
                 android:layout_marginTop="20dp"
                 app:helperTextEnabled="true"
                 app:helperText="p. ej.: https://manacar.com/logo.jpg">

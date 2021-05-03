@@ -36,9 +36,6 @@ import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity implements OnVehicleInteractionListener{
 
-    //DB Connection
-    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,5 +80,6 @@ public class MainActivity extends AppCompatActivity implements OnVehicleInteract
     public void OnVehicleClick(Vehicle vehicle) {
 
     }
+
 
 }

@@ -109,7 +109,7 @@ public class VehicleFragment extends Fragment {
 
                 }
             });
-            //recyclerView.setAdapter(new MyVehicleRecyclerViewAdapter(getActivity(), vehicleList, mListener));
+            recyclerView.setAdapter(new MyVehicleRecyclerViewAdapter(getActivity(), vehicleList, mListener));
         }
         return view;
     }

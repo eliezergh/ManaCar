@@ -78,9 +78,10 @@ public class addActivity extends AppCompatActivity {
                 Random rnd = new Random();
                 int vid = rnd.nextInt();
                 DatabaseReference mConditionVId = mRootRef.child("vehicles").child("vId"+vid);
-                DatabaseReference mConditionVName = mRootRef.child("vehicles").child("vId"+vid).child("vehicleName");
+                DatabaseReference mConditionVName = mRootRef.child("vehicles").child("vId"+vid).child("vehicleManufacturer");
                 DatabaseReference mConditionVMotor = mRootRef.child("vehicles").child("vId"+vid).child("Motor");
-                DatabaseReference mConditionVRNumber = mRootRef.child("vehicles").child("vId"+vid).child("registrationNumber");
+                DatabaseReference mConditionVRNumber = mRootRef.child("vehicles").child("vId"+vid).child("vehicleRegistrationNumber");
+                DatabaseReference mConditionVMImage = mRootRef.child("vehicles").child("vId"+vid).child("vehicleMainImage");
                 //First, we should get the values on the form
                 TextInputLayout newVehicleManufacturer = findViewById(R.id.newVehicleManufacturer);
                 String VehicleManufacturer = newVehicleManufacturer.getEditText().getText().toString();
@@ -88,11 +89,14 @@ public class addActivity extends AppCompatActivity {
                 String VehicleMotor = newVehicleMotor.getEditText().getText().toString();
                 TextInputLayout newVehicleRegistrationNumber = findViewById(R.id.newVehicleRegistrationNumber);
                 String VehicleRegistrationNumber = newVehicleRegistrationNumber.getEditText().getText().toString();
+                TextInputLayout newVehicleMainImage = findViewById(R.id.newVehicleMainImage);
+                String VehicleMainImage = newVehicleMainImage.getEditText().getText().toString();
 
-                if (!VehicleManufacturer.isEmpty() && !VehicleMotor.isEmpty() && !VehicleRegistrationNumber.isEmpty()) {
+                if (!VehicleManufacturer.isEmpty() && !VehicleMotor.isEmpty() && !VehicleRegistrationNumber.isEmpty() && !VehicleMainImage.isEmpty()) {
                     mConditionVName.setValue(VehicleManufacturer);
                     mConditionVMotor.setValue(VehicleMotor);
                     mConditionVRNumber.setValue(VehicleRegistrationNumber);
+                    mConditionVMImage.setValue(VehicleMainImage);
                     //Go back to Main Activity
                     startActivity(new Intent(addActivity.this, MainActivity.class));
                 } else {

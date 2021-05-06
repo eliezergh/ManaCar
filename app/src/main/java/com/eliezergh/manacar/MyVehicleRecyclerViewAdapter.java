@@ -1,5 +1,6 @@
 package com.eliezergh.manacar;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentValues;
@@ -15,12 +16,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Registry;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Text;
 
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -32,6 +44,11 @@ public class MyVehicleRecyclerViewAdapter extends RecyclerView.Adapter<MyVehicle
     private final List<Vehicle> mValues;
     private final OnVehicleInteractionListener mListener;
     private Context ctx;
+    //Storage
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    //StorageReference storageRef = storage.getReference();
+    //Default vehicle logo
+    StorageReference defaultVehicleImage = storage.getReferenceFromUrl("gs://manacar-46ccf.appspot.com/images/defaultVehicle.jpg");
 
     public MyVehicleRecyclerViewAdapter(Context context, List<Vehicle> items, OnVehicleInteractionListener listener) {
         ctx = context;
@@ -48,14 +65,25 @@ public class MyVehicleRecyclerViewAdapter extends RecyclerView.Adapter<MyVehicle
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+
         holder.mItem = mValues.get(position);
         holder.vehicleManufacturer.setText(holder.mItem.getVehicleManufacturer());
         holder.vehicleMotor.setText(holder.mItem.getMotor());
         holder.vehicleRegistrationNumber.setText(holder.mItem.getVehicleRegistrationNumber());
         holder.vId.setText(holder.mItem.getvId());
-        Glide.with(ctx)
-                .load(holder.mItem.getVehicleMainImage())
-                .into(holder.vehicleMainImage);
+
+        //if it has no value, then load manacar logo
+        if (holder.mItem.getVehicleMainImage().equals("")) {
+            //Load default vehicle image
+            Glide.with(ctx)
+                    .load(defaultVehicleImage)
+                    .into(holder.vehicleMainImage);
+        } else {
+            //Load image provided by the user
+            Glide.with(ctx)
+                    .load(holder.mItem.getVehicleMainImage())
+                    .into(holder.vehicleMainImage);
+        }
         //Delete BUTTON
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -4,31 +4,21 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.installations.RandomFidGenerator;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Random;
 
 
@@ -69,7 +59,6 @@ public class addActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         Button saveButton = findViewById(R.id.addNewVehicleSaveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +86,7 @@ public class addActivity extends AppCompatActivity {
                     mConditionVMotor.setValue(VehicleMotor);
                     mConditionVRNumber.setValue(VehicleRegistrationNumber);
                     mConditionVMImage.setValue(VehicleMainImage);
+
                     //Go back to Main Activity
                     startActivity(new Intent(addActivity.this, MainActivity.class));
                 } else {
@@ -106,4 +96,5 @@ public class addActivity extends AppCompatActivity {
             }
         });
     }
+
 }

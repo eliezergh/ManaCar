@@ -14,12 +14,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Registry;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,7 +97,9 @@ public class VehicleFragment extends Fragment {
             mConditionRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    //long childItems = snapshot.getChildrenCount();
+                    //Clear the array before load again the data on DB
+                    vehicleList.clear();
+                    //Get vehicles on DB and
                     for (DataSnapshot snap : snapshot.getChildren()){
                         Vehicle vehicle = snap.getValue(Vehicle.class);
                         vId[0] = (String) snap.getKey();

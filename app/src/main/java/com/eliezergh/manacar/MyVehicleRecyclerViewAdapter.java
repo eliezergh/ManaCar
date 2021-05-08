@@ -101,6 +101,20 @@ public class MyVehicleRecyclerViewAdapter extends RecyclerView.Adapter<MyVehicle
                 notifyDataSetChanged();
             }
         });
+        //Modify BUTTON
+        holder.modifyButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //Get the vID to modify
+                String vIdToModify = holder.mItem.getvId();
+                Intent intent = new Intent(ctx, modActivity.class);
+                //Pass the vID to the next modify activity
+                intent.putExtra("EXTRA_VEHICLE_ID", vIdToModify);
+                ctx.startActivity(intent);
+
+            }
+        });
+        //
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

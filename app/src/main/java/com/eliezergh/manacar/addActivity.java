@@ -27,6 +27,7 @@ public class addActivity extends AppCompatActivity {
     //DB Connection
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

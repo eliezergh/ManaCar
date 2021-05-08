@@ -18,6 +18,13 @@
                 android:value="com.eliezergh.manacar.MainActivity" />
         </activity>
         <activity
+            android:name=".modActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.eliezergh.manacar.MainActivity"/>
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.ManaCar.NoActionBar">

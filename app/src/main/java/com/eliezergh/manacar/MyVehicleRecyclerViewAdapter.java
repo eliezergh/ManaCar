@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Registry;
 import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.module.AppGlideModule;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.material.snackbar.Snackbar;
@@ -49,6 +50,7 @@ public class MyVehicleRecyclerViewAdapter extends RecyclerView.Adapter<MyVehicle
     //StorageReference storageRef = storage.getReference();
     //Default vehicle logo
     StorageReference defaultVehicleImage = storage.getReferenceFromUrl("gs://manacar-46ccf.appspot.com/images/defaultVehicle.jpg");
+    StorageReference userVehicleImage;
 
     public MyVehicleRecyclerViewAdapter(Context context, List<Vehicle> items, OnVehicleInteractionListener listener) {
         ctx = context;
@@ -80,8 +82,12 @@ public class MyVehicleRecyclerViewAdapter extends RecyclerView.Adapter<MyVehicle
                     .into(holder.vehicleMainImage);
         } else {
             //Load image provided by the user
+            String path = holder.mItem.getVehicleMainImage();
+            userVehicleImage = storage.getReferenceFromUrl(""+path+"");
             Glide.with(ctx)
-                    .load(holder.mItem.getVehicleMainImage())
+                    .load(userVehicleImage)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .into(holder.vehicleMainImage);
         }
         //Delete BUTTON
@@ -95,6 +101,8 @@ public class MyVehicleRecyclerViewAdapter extends RecyclerView.Adapter<MyVehicle
                 DatabaseReference mConditionRef = mRootRef.child("vehicles");
                 //Delete from DB using vId
                 mConditionRef.child(vIdToDelete).removeValue();
+                //Delete image
+                userVehicleImage.delete();
                 //Delete from list
                 mValues.remove(position);
                 notifyItemRemoved(position);

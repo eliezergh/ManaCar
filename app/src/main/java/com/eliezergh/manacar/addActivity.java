@@ -24,6 +24,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -53,6 +55,7 @@ public class addActivity extends AppCompatActivity {
     Random rnd = new Random();
     int vid = rnd.nextInt();
     String fpath = "vId"+vid;
+    String userUid = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +67,11 @@ public class addActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         Random rnd = new Random();
         rnd.nextInt();
+        //Get userUid
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user !=null){
+            userUid = user.getUid();
+        }
         //Image
         pickImageButton = findViewById(R.id.pickImageButton);
         vehicleImageView = findViewById(R.id.vehicleImageView);
@@ -122,7 +130,7 @@ public class addActivity extends AppCompatActivity {
             StorageReference ref
                     = storageReference
                     .child(
-                            "images/"
+                            "images/"+userUid+"/"
                                     + fpath);
 
             // adding listeners on upload
@@ -204,11 +212,11 @@ public class addActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseReference mConditionVId = mRootRef.child("vehicles").child("vId"+vid);
-                DatabaseReference mConditionVName = mRootRef.child("vehicles").child("vId"+vid).child("vehicleManufacturer");
-                DatabaseReference mConditionVMotor = mRootRef.child("vehicles").child("vId"+vid).child("Motor");
-                DatabaseReference mConditionVRNumber = mRootRef.child("vehicles").child("vId"+vid).child("vehicleRegistrationNumber");
-                DatabaseReference mConditionVMImage = mRootRef.child("vehicles").child("vId"+vid).child("vehicleMainImage");
+                DatabaseReference mConditionVId = mRootRef.child(userUid).child("vehicles").child("vId"+vid);
+                DatabaseReference mConditionVName = mRootRef.child(userUid).child("vehicles").child("vId"+vid).child("vehicleManufacturer");
+                DatabaseReference mConditionVMotor = mRootRef.child(userUid).child("vehicles").child("vId"+vid).child("Motor");
+                DatabaseReference mConditionVRNumber = mRootRef.child(userUid).child("vehicles").child("vId"+vid).child("vehicleRegistrationNumber");
+                DatabaseReference mConditionVMImage = mRootRef.child(userUid).child("vehicles").child("vId"+vid).child("vehicleMainImage");
                 //First, we should get the values on the form
                 TextInputLayout newVehicleManufacturer = findViewById(R.id.newVehicleManufacturer);
                 String VehicleManufacturer = newVehicleManufacturer.getEditText().getText().toString();
@@ -219,7 +227,7 @@ public class addActivity extends AppCompatActivity {
 
                 //TextInputLayout newVehicleMainImage = findViewById(R.id.newVehicleMainImage);
                 //String VehicleMainImage = newVehicleMainImage.getEditText().getText().toString();
-                StorageReference stg = storage.getReference("images/"+fpath);
+                StorageReference stg = storage.getReference("images/"+userUid+"/"+fpath);
                 gsPath = "gs://"+stg.getBucket()+stg.getPath();
                 if (!VehicleManufacturer.isEmpty() && !VehicleMotor.isEmpty() && !VehicleRegistrationNumber.isEmpty()) {
                     mConditionVName.setValue(VehicleManufacturer);

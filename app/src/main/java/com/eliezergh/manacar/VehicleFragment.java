@@ -10,15 +10,20 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Registry;
 import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.module.AppGlideModule;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,8 +43,7 @@ public class VehicleFragment extends Fragment {
     OnVehicleInteractionListener mListener;
     List<Vehicle> vehicleList;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference mConditionRef = mRootRef.child("vehicles");
-
+    String userUid;
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
@@ -70,13 +74,18 @@ public class VehicleFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+        //Get userUid
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user !=null){
+            userUid = user.getUid();
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
-
+        DatabaseReference mConditionRef = mRootRef.child(userUid).child("vehicles");
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -138,4 +147,6 @@ public class VehicleFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+
 }

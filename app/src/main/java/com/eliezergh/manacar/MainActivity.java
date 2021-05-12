@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,22 +38,34 @@ import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity implements OnVehicleInteractionListener{
 
+    String userUid = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         //Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //Get userUid
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user !=null){
+            userUid = user.getUid();
+        }
+
         //Floating button functionality
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, addActivity.class));
+                Intent addVehicle = new Intent (MainActivity.this, addActivity.class);
+                //startActivity(new Intent(MainActivity.this, addActivity.class));
+                addVehicle.putExtra("USER_UID", userUid);
+                startActivity(addVehicle);
             }
         });
+
     }
 
     @Override
@@ -69,8 +83,9 @@ public class MainActivity extends AppCompatActivity implements OnVehicleInteract
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_logout) {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent (MainActivity.this, LoginActivity.class));
         }
 
         return super.onOptionsItemSelected(item);

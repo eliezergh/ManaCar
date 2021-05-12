@@ -22,6 +22,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.module.AppGlideModule;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,7 +53,7 @@ public class MyVehicleRecyclerViewAdapter extends RecyclerView.Adapter<MyVehicle
     //Default vehicle logo
     StorageReference defaultVehicleImage = storage.getReferenceFromUrl("gs://manacar-46ccf.appspot.com/images/defaultVehicle.jpg");
     StorageReference userVehicleImage;
-
+    String userUid;
     public MyVehicleRecyclerViewAdapter(Context context, List<Vehicle> items, OnVehicleInteractionListener listener) {
         ctx = context;
         mListener = listener;
@@ -94,11 +96,16 @@ public class MyVehicleRecyclerViewAdapter extends RecyclerView.Adapter<MyVehicle
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //userEmail
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user !=null){
+                    userUid = user.getUid();
+                }
                 //Get position
                 String vIdToDelete = holder.mItem.getvId();
                 //DB Connection
                 DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-                DatabaseReference mConditionRef = mRootRef.child("vehicles");
+                DatabaseReference mConditionRef = mRootRef.child(userUid).child("vehicles");
                 //Delete from DB using vId
                 mConditionRef.child(vIdToDelete).removeValue();
                 //Delete image

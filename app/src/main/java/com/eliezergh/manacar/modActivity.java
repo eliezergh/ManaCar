@@ -20,10 +20,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,7 +48,7 @@ public class modActivity extends AppCompatActivity {
 
     //DB Connection
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference mConditionRef = mRootRef.child("vehicles");
+
     //ImageView
     Button modPickImageButton;
     ImageView modVehicleImageView;
@@ -55,6 +58,8 @@ public class modActivity extends AppCompatActivity {
     //Storage
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageReference = storage.getReference();
+    //
+    String userUid = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +69,11 @@ public class modActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         // showing the back button in action bar
         actionBar.setDisplayHomeAsUpEnabled(true);
+        //Get userUid
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user !=null){
+            userUid = user.getUid();
+        }
         //Image
         modPickImageButton = findViewById(R.id.modPickImageButton);
         modVehicleImageView = findViewById(R.id.modVehicleImageView);
@@ -98,7 +108,7 @@ public class modActivity extends AppCompatActivity {
             StorageReference ref
                     = storageReference
                     .child(
-                            "images/"
+                            "images/"+userUid+"/"
                                     + vIdToModify);
 
             // adding listeners on upload
@@ -157,7 +167,6 @@ public class modActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -182,8 +191,6 @@ public class modActivity extends AppCompatActivity {
         }
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -207,10 +214,9 @@ public class modActivity extends AppCompatActivity {
         //Get vehicle id to modify
         vIdToModify = getIntent().getStringExtra("EXTRA_VEHICLE_ID");
         //Get vehicle image path
-        StorageReference stg = storage.getReference("images/"+vIdToModify);
+        StorageReference stg = storage.getReference("images/"+userUid+"/"+vIdToModify);
         String gsPath = "gs://"+stg.getBucket()+stg.getPath();
         //StorageReference userVehicleImage = storage.getReferenceFromUrl(""+gsPath+"");
-
         TextInputLayout modVehicleManufacturer = findViewById(R.id.modVehicleManufacturer);
         TextInputLayout modVehicleMotor = findViewById(R.id.modVehicleMotor);
         TextInputLayout modVehicleRegistrationNumber = findViewById(R.id.modVehicleRegistrationNumber);
@@ -218,7 +224,7 @@ public class modActivity extends AppCompatActivity {
         final String[] mVehicleManufacturer = new String[1];
         final String[] mMotor = new String[1];
         final String[] mVehicleRegistrationNumber = new String[1];
-
+        DatabaseReference mConditionRef = mRootRef.child(userUid).child("vehicles");
         mConditionRef.child(vIdToModify).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -242,19 +248,18 @@ public class modActivity extends AppCompatActivity {
         modifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //DatabaseReference mConditionVId = mRootRef.child("vehicles").child(vIdToModify);
-                DatabaseReference mConditionVName = mRootRef.child("vehicles").child(vIdToModify).child("vehicleManufacturer");
-                DatabaseReference mConditionVMotor = mRootRef.child("vehicles").child(vIdToModify).child("Motor");
-                DatabaseReference mConditionVRNumber = mRootRef.child("vehicles").child(vIdToModify).child("vehicleRegistrationNumber");
-                DatabaseReference mConditionVMImage = mRootRef.child("vehicles").child(vIdToModify).child("vehicleMainImage");
+                DatabaseReference mConditionVName = mRootRef.child(userUid).child("vehicles").child(vIdToModify).child("vehicleManufacturer");
+                DatabaseReference mConditionVMotor = mRootRef.child(userUid).child("vehicles").child(vIdToModify).child("Motor");
+                DatabaseReference mConditionVRNumber = mRootRef.child(userUid).child("vehicles").child(vIdToModify).child("vehicleRegistrationNumber");
+                DatabaseReference mConditionVMImage = mRootRef.child(userUid).child("vehicles").child(vIdToModify).child("vehicleMainImage");
                 //First, we should get the values on the form
                 String VehicleManufacturer = modVehicleManufacturer.getEditText().getText().toString();
                 String VehicleMotor = modVehicleMotor.getEditText().getText().toString();
                 String VehicleRegistrationNumber = modVehicleRegistrationNumber.getEditText().getText().toString();
-                //String VehicleMainImage = modVehicleMainImage.getEditText().getText().toString();
 
+                //Check if text inputs are empty
                 if (!VehicleManufacturer.isEmpty() && !VehicleMotor.isEmpty() && !VehicleRegistrationNumber.isEmpty()) {
-                    //userVehicleImage.delete();
+                   //Save all data
                     uploadImage();
                     mConditionVName.setValue(VehicleManufacturer);
                     mConditionVMotor.setValue(VehicleMotor);

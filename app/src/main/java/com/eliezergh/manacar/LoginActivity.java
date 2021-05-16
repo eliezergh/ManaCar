@@ -101,5 +101,8 @@ public class LoginActivity extends AppCompatActivity {
         mainIntent.putExtra("USER_EMAIL", email);
         startActivity(mainIntent);
     }
-
+    @Override
+    public void onBackPressed() {
+        //do nothing
+    }
 }

@@ -73,6 +73,8 @@ public class modActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user !=null){
             userUid = user.getUid();
+        } else {
+            startActivity(new Intent(modActivity.this, LoginActivity.class));
         }
         //Image
         modPickImageButton = findViewById(R.id.modPickImageButton);

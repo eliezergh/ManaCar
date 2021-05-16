@@ -71,6 +71,8 @@ public class addActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user !=null){
             userUid = user.getUid();
+        } else {
+            startActivity(new Intent(addActivity.this, LoginActivity.class));
         }
         //Image
         pickImageButton = findViewById(R.id.pickImageButton);

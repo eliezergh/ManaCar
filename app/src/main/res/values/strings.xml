@@ -26,4 +26,5 @@
     <string name="invalid_password">La contraseña debe tener más de 5 caracteres</string>
     <string name="login_failed">"Inicio de sesión fallido"</string>
     <string name="action_register">Registrarme</string>
+    <string name="lostPassword">¿Has olvidado tu contraseña?</string>
 </resources>

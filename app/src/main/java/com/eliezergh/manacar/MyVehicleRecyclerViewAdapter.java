@@ -109,6 +109,7 @@ public class MyVehicleRecyclerViewAdapter extends RecyclerView.Adapter<MyVehicle
                 //Delete from DB using vId
                 mConditionRef.child(vIdToDelete).removeValue();
                 //Delete image
+                userVehicleImage = storage.getReferenceFromUrl(holder.mItem.getVehicleMainImage());
                 userVehicleImage.delete();
                 //Delete from list
                 mValues.remove(position);

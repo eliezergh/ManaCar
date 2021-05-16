@@ -236,6 +236,7 @@ public class addActivity extends AppCompatActivity {
                     mConditionVMotor.setValue(VehicleMotor);
                     mConditionVRNumber.setValue(VehicleRegistrationNumber);
                     uploadImage();
+
                     mConditionVMImage.setValue(gsPath);
 
                     //Go back to Main Activity

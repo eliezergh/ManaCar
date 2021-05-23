@@ -219,6 +219,7 @@ public class modActivity extends AppCompatActivity {
         //Get vehicle image path
         StorageReference stg = storage.getReference("images/"+userUid+"/"+vIdToModify);
         String gsPath = "gs://"+stg.getBucket()+stg.getPath();
+        Log.e("gspath: ", gsPath);
         //StorageReference userVehicleImage = storage.getReferenceFromUrl(""+gsPath+"");
         TextInputLayout modVehicleManufacturer = findViewById(R.id.modVehicleManufacturer);
         TextInputLayout modVehicleMotor = findViewById(R.id.modVehicleMotor);
@@ -227,6 +228,7 @@ public class modActivity extends AppCompatActivity {
         final String[] mVehicleManufacturer = new String[1];
         final String[] mMotor = new String[1];
         final String[] mVehicleRegistrationNumber = new String[1];
+        final String[] mMainImage = new String[1];
         DatabaseReference mConditionRef = mRootRef.child(userUid).child("vehicles");
         mConditionRef.child(vIdToModify).addValueEventListener(new ValueEventListener() {
             @Override
@@ -236,6 +238,7 @@ public class modActivity extends AppCompatActivity {
                     mVehicleManufacturer[0] = vehicle.vehicleManufacturer;
                     mMotor[0] = vehicle.Motor;
                     mVehicleRegistrationNumber[0] = vehicle.vehicleRegistrationNumber;
+                    mMainImage[0] = vehicle.getVehicleMainImage();
                     //Set text on TextViews
                     modVehicleManufacturer.getEditText().setText(mVehicleManufacturer[0]);
                     modVehicleMotor.getEditText().setText(mMotor[0]);
@@ -271,8 +274,16 @@ public class modActivity extends AppCompatActivity {
                     mConditionVName.setValue(VehicleManufacturer);
                     mConditionVMotor.setValue(VehicleMotor);
                     mConditionVRNumber.setValue(VehicleRegistrationNumber);
-                    uploadImage();
-                    mConditionVMImage.setValue(gsPath);
+                    if (modVehicleImageView.getDrawable() == null){
+                        if (mMainImage[0].equals(defaultVehicleImage)) {
+                            mConditionVMImage.setValue(defaultVehicleImage);
+                        }
+                    } else {
+                        uploadImage();
+                        mConditionVMImage.setValue(gsPath);
+                    }
+
+
 
                     //Go back to Main Activity
                     startActivity(new Intent(modActivity.this, MainActivity.class));

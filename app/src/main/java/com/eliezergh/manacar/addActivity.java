@@ -56,6 +56,7 @@ public class addActivity extends AppCompatActivity {
     int vid = rnd.nextInt();
     String fpath = "vId"+vid;
     String userUid = "";
+    String defaultVehicleImage = "gs://manacar-46ccf.appspot.com/images/defaultVehicle.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -235,10 +236,14 @@ public class addActivity extends AppCompatActivity {
                     mConditionVName.setValue(VehicleManufacturer);
                     mConditionVMotor.setValue(VehicleMotor);
                     mConditionVRNumber.setValue(VehicleRegistrationNumber);
+                    if (vehicleImageView.getDrawable() == null) {
+                        mConditionVMImage.setValue(defaultVehicleImage);
+                    } else {
+
                     uploadImage();
 
                     mConditionVMImage.setValue(gsPath);
-
+                }
                     //Go back to Main Activity
                     startActivity(new Intent(addActivity.this, MainActivity.class));
                 } else {

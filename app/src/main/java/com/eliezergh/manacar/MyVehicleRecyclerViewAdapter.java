@@ -51,7 +51,8 @@ public class MyVehicleRecyclerViewAdapter extends RecyclerView.Adapter<MyVehicle
     FirebaseStorage storage = FirebaseStorage.getInstance();
     //StorageReference storageRef = storage.getReference();
     //Default vehicle logo
-    StorageReference defaultVehicleImage = storage.getReferenceFromUrl("gs://manacar-46ccf.appspot.com/images/defaultVehicle.jpg");
+    //StorageReference defaultVehicleImage = storage.getReferenceFromUrl("gs://manacar-46ccf.appspot.com/images/defaultVehicle.jpg");
+    String defaultVehicleImage = "gs://manacar-46ccf.appspot.com/images/defaultVehicle.jpg";
     StorageReference userVehicleImage;
     String userUid;
     public MyVehicleRecyclerViewAdapter(Context context, List<Vehicle> items, OnVehicleInteractionListener listener) {
@@ -77,12 +78,12 @@ public class MyVehicleRecyclerViewAdapter extends RecyclerView.Adapter<MyVehicle
         holder.vId.setText(holder.mItem.getvId());
 
         //if it has no value, then load manacar logo
-        if (holder.mItem.getVehicleMainImage().equals("")) {
+        /*if (holder.mItem.getVehicleMainImage().equals("")) {
             //Load default vehicle image
             Glide.with(ctx)
                     .load(defaultVehicleImage)
                     .into(holder.vehicleMainImage);
-        } else {
+        } else {*/
             //Load image provided by the user
             String path = holder.mItem.getVehicleMainImage();
             userVehicleImage = storage.getReferenceFromUrl(""+path+"");
@@ -91,7 +92,7 @@ public class MyVehicleRecyclerViewAdapter extends RecyclerView.Adapter<MyVehicle
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(holder.vehicleMainImage);
-        }
+      //  }
         //Delete BUTTON
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,8 +110,13 @@ public class MyVehicleRecyclerViewAdapter extends RecyclerView.Adapter<MyVehicle
                 //Delete from DB using vId
                 mConditionRef.child(vIdToDelete).removeValue();
                 //Delete image
-                userVehicleImage = storage.getReferenceFromUrl(holder.mItem.getVehicleMainImage());
-                userVehicleImage.delete();
+                if (holder.mItem.getVehicleMainImage().equals(defaultVehicleImage)){
+                    //dont delete default image from storage
+                } else {
+                    userVehicleImage = storage.getReferenceFromUrl(holder.mItem.getVehicleMainImage());
+                    String gsPath = "gs://"+userVehicleImage.getBucket()+userVehicleImage.getPath();
+                    userVehicleImage.delete();
+                }
                 //Delete from list
                 mValues.remove(position);
                 notifyItemRemoved(position);

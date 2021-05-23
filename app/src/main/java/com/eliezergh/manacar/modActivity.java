@@ -60,6 +60,7 @@ public class modActivity extends AppCompatActivity {
     StorageReference storageReference = storage.getReference();
     //
     String userUid = "";
+    String defaultVehicleImage = "gs://manacar-46ccf.appspot.com/images/defaultVehicle.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,14 +231,18 @@ public class modActivity extends AppCompatActivity {
         mConditionRef.child(vIdToModify).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
                 Vehicle vehicle = snapshot.getValue(Vehicle.class);
-                mVehicleManufacturer[0] = vehicle.vehicleManufacturer;
-                mMotor[0] = vehicle.Motor;
-                mVehicleRegistrationNumber[0] = vehicle.vehicleRegistrationNumber;
-                //Set text on TextViews
-                modVehicleManufacturer.getEditText().setText(mVehicleManufacturer[0]);
-                modVehicleMotor.getEditText().setText(mMotor[0]);
-                modVehicleRegistrationNumber.getEditText().setText(mVehicleRegistrationNumber[0]);
+                    mVehicleManufacturer[0] = vehicle.vehicleManufacturer;
+                    mMotor[0] = vehicle.Motor;
+                    mVehicleRegistrationNumber[0] = vehicle.vehicleRegistrationNumber;
+                    //Set text on TextViews
+                    modVehicleManufacturer.getEditText().setText(mVehicleManufacturer[0]);
+                    modVehicleMotor.getEditText().setText(mMotor[0]);
+                    modVehicleRegistrationNumber.getEditText().setText(mVehicleRegistrationNumber[0]);
+                } else {
+                    //do nothing
+                }
             }
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
@@ -262,11 +267,13 @@ public class modActivity extends AppCompatActivity {
                 //Check if text inputs are empty
                 if (!VehicleManufacturer.isEmpty() && !VehicleMotor.isEmpty() && !VehicleRegistrationNumber.isEmpty()) {
                    //Save all data
-                    uploadImage();
+
                     mConditionVName.setValue(VehicleManufacturer);
                     mConditionVMotor.setValue(VehicleMotor);
                     mConditionVRNumber.setValue(VehicleRegistrationNumber);
+                    uploadImage();
                     mConditionVMImage.setValue(gsPath);
+
                     //Go back to Main Activity
                     startActivity(new Intent(modActivity.this, MainActivity.class));
                 } else {

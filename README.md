@@ -1,4 +1,4 @@
-# ManaCar
+# ManaCar - Archived
 This is an Android application developed as a final project for my studies as a Cross-platform Application Developer
 
 # Resources credits
